@@ -1,0 +1,15 @@
+build/
+build-*/
+firmware/esp32cam/build/
+firmware/esp32cam/managed_components/
+firmware/esp32cam/sdkconfig
+firmware/esp32cam/sdkconfig.old
+firmware/esp32cam/dependencies.lock
+testdata/generated/
+*.log
+*.o
+*.a
+*.so
+*.dylib
+.DS_Store
+.cache/
