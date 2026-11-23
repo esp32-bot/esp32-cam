@@ -1,0 +1,13 @@
+# Compact Tiny+Big partition layout for AI-Thinker ESP32-CAM (4 MB flash).
+# Mirrors balax/partitions_compact.csv, tightened for displayless/speakerless ESP32-CAM:
+#   - factory (0x20000, 576 KB = 0x90000): minimal pure-C Wi-Fi OTA rescue stub (no LCD/speaker/PMIC)
+#   - ota_0   (0xB0000, 3.19 MB = 0x330000): main livestream / balax-cam firmware (+64 KB over balax!)
+#   - telemetry / coredump: 64 KB each at top of flash (matching balax layout)
+# Name,    Type, SubType,  Offset,   Size
+nvs,       data, nvs,      0x9000,   0x6000
+otadata,   data, ota,      0xf000,   0x2000
+phy_init,  data, phy,      0x11000,  0x1000
+factory,   app,  factory,  0x20000,  0x90000
+ota_0,     app,  ota_0,    0xB0000,  0x330000
+telemetry, data, 0x99,     0x3E0000, 0x10000
+coredump,  data, coredump, 0x3F0000, 0x10000

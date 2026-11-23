@@ -1,0 +1,80 @@
+menu "ESP32-CAM Livestream Configuration"
+
+    config ECL_WIFI_SSID
+        string "Wi-Fi SSID (fallback if NVS cam_net is empty)"
+        default ""
+
+    config ECL_WIFI_PASSWORD
+        string "Wi-Fi Password (put real credentials in gitignored sdkconfig.local)"
+        default ""
+
+    config ECL_UDP_DEST_IP
+        string "UDP Receiver IPv4 Address"
+        default "255.255.255.255"
+
+    config ECL_UDP_DEST_PORT
+        int "UDP Receiver Port"
+        default 5000
+
+    config ECL_XCLK_MHZ
+        int "OV2640 XCLK Frequency (MHz, 12-20 safe; do not overclock by default)"
+        range 10 20
+        default 16
+
+    config ECL_JPEG_QUALITY
+        int "OV2640 JPEG QS (10-20 recommended; lower = higher quality)"
+        range 6 40
+        default 12
+
+    choice ECL_FRAME_SIZE
+        prompt "OV2640 Frame Size"
+        default ECL_FRAMESIZE_QVGA
+        config ECL_FRAMESIZE_QVGA
+            bool "QVGA (320x240)"
+        config ECL_FRAMESIZE_CIF
+            bool "CIF (400x296)"
+        config ECL_FRAMESIZE_VGA
+            bool "VGA (640x480)"
+        config ECL_FRAMESIZE_SVGA
+            bool "SVGA (800x600)"
+    endchoice
+
+    choice ECL_DEFAULT_CODEC_MODE
+        prompt "Default Livestream Codec Mode"
+        default ECL_CODEC_PASS_THROUGH
+        config ECL_CODEC_PASS_THROUGH
+            bool "CODEC_PASS_THROUGH (permanent zero-overhead JPEG fallback)"
+        config ECL_CODEC_FRAME_SKIP
+            bool "CODEC_FRAME_SKIP (duplicate hash skip)"
+        config ECL_CODEC_DCT_DC
+            bool "CODEC_DCT_DC_RESIDUAL (experimental)"
+        config ECL_CODEC_DCT_LOW_AC
+            bool "CODEC_DCT_LOW_AC_RESIDUAL (experimental)"
+        config ECL_CODEC_DCT_FULL
+            bool "CODEC_DCT_FULL_RESIDUAL (experimental lossless DCT)"
+        config ECL_CODEC_DCT_SPARSE
+            bool "CODEC_DCT_SPARSE_BLOCK (experimental deadzone T=2)"
+    endchoice
+
+    config ECL_ENABLE_DCT_CODEC
+        bool "Allocate bounded PSRAM DCT reference buffers for experimental temporal modes"
+        default y
+        help
+            Disable to eliminate all DCT reference buffer allocations (~230-920 KB PSRAM)
+            and run strictly in PASS_THROUGH or FRAME_SKIP mode.
+
+    config ECL_KEYFRAME_INTERVAL
+        int "Temporal Codec Keyframe Interval (frames)"
+        range 1 120
+        default 15
+
+    config ECL_ENABLE_HTTP_MJPEG_FALLBACK
+        bool "Enable HTTP MJPEG /stream and /metrics fallback server (port 80)"
+        default y
+
+    config ECL_WIFI_TX_POWER_QDBM
+        int "Wi-Fi Max TX Power (units of 0.25 dBm; 52 = +13 dBm thermal/brownout cap)"
+        range 20 78
+        default 52
+
+endmenu

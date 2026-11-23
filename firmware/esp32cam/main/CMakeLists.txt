@@ -1,0 +1,19 @@
+idf_component_register(
+    SRCS
+        "cam_driver.cpp"
+        "app_main.cpp"
+    INCLUDE_DIRS
+        "."
+    REQUIRES
+        codec
+        transport
+        esp32-camera
+        esp_wifi
+        esp_netif
+        esp_event
+        esp_http_server
+        esp_timer
+        nvs_flash
+        esp_driver_gpio
+        lwip
+)

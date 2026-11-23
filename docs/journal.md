@@ -25,3 +25,11 @@
 - Build two clean repositories: `esp32-cam-livestream` (standalone video engine) and `balax-cam` (robot consumer depending on `esp32-cam-livestream`).
 - Keep `codec/` and `transport/` strictly platform-independent C++17 (no STL heap churn in hot paths, bounded buffers) so the exact same `.cpp`/`.hpp` files compile on Apple M5 host and ESP-IDF Xtensa `esp32`.
 - Keep `CODEC_PASS_THROUGH` as the permanent zero-overhead fallback and make all temporal modes and sensor-crop stabilization opt-in feature flags.
+
+## Entry 4 — Compact Tiny+Big Partition Layout & Real Xtensa Compilation (Milestones C & G)
+
+- **Compact Partition Layout (`firmware/partitions_cam_compact.csv`)**: Adopted the tiny+big pattern from `balax/partitions_compact.csv` and shrank `factory` by 64 KB from `0xA0000` (640 KB) to `0x90000` (576 KB), expanding `ota_0` to `0x330000` (3.19 MB) because AI-Thinker ESP32-CAM has no LCD, speaker, or PMIC.
+- **Stub Size Optimization**: Initial `ota_stub` build was `620,624 B` (`606.1 KB`, overflowing `0x90000` by `30.8 KB`) because `libtfpsacrypto.a` (102 KB) and `stdio_vfs.c.obj` (31 KB) were linked by default.
+  - Note: Disabling `CONFIG_ESP_WIFI_MBEDTLS_CRYPTO=n` hits an ESP-IDF v6.1.1 link error (`undefined reference to sha1_vector` in `wpa_supplicant`).
+  - Keeping `ESP_WIFI_MBEDTLS_CRYPTO=y` while disabling WPA3 SAE/OWE, Enterprise, 11kv, TLS, ECP, GCM, SHA-512/384, and setting `CONFIG_ESP_CONSOLE_NONE=y` + `CONFIG_MBEDTLS_AES_FEWER_TABLES=y` brought `esp32cam_ota_stub.bin` down to **`549,728 B` (`536.8 KB`)** — fitting cleanly inside `0x90000` (576 KB) with `40 KB` (`6.8%`) free and zero partition warnings.
+- **Main Firmware Cross-Compile**: `firmware/esp32cam` compiled cleanly on ESP-IDF v6.1.1 (`espressif/esp32-camera` 2.0.15 fetched via Component Manager) using the exact same `codec/` and `transport/` C++17 sources tested on the host (`890,864 B`, `32.4%` DRAM, `libcodec.a = 8.4 KB`, `libtransport.a = 1.0 KB`).

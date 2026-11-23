@@ -88,3 +88,20 @@
 3. **Perceptual deadzone (`DCT_SPARSE_T2`) is the standout experimental mode:** Filtering `±1..2` quantization jitter cuts `sensor_noise` by **12.7×** (`39.16 dB`), `high_texture` by **14.5×** (`42.00 dB`), and `small_pitch` / `smooth_pan` by **~2×** (`35.1 dB / 0.92 SSIM`).
 4. **DC-only (`DCT_DC_RES`) is unsuitable for camera motion:** Despite tiny size, frozen high-frequency AC edges produce severe ghosting (`24–25 dB`, `0.60–0.67 SSIM`) under pitch/pan.
 5. **Packet-loss tradeoff is real:** Without FEC or keyframe-request feedback, temporal dependencies drop more frames than independent MJPEG under 5% packet loss (`15/30` vs `21/30`), even though zero frames are corrupted and recovery is strictly bounded by `KF`.
+
+## 6. ESP32 Xtensa Cross-Compilation & Memory Footprint (ESP-IDF v6.1.1)
+
+> **[Measured in Xtensa build — NOT runtime hardware telemetry]:** The numbers below come directly from `idf.py build` + `python -m esp_idf_size` on `xtensa-esp32-elf-g++ 15.2.0` / ESP-IDF `v6.1.1`. Runtime FPS, CPU %, Wi-Fi Mbps, and thermal behavior remain `[Requires hardware validation]`.
+
+| Image | Partition Slot | Binary Size | Partition Budget | Free Headroom | Static DRAM | Static IRAM |
+|---|---|---:|---:|---:|---:|---:|
+| `esp32cam_ota_stub.bin` | `factory` (`0x20000`) | `549,728 B` (`536.8 KB`) | `589,824 B` (`576 KB`, `0x90000`) | `40,096 B` (`6.8%`) | minimal | minimal |
+| `esp32_cam_livestream_fw.bin` (with DCT codec) | `ota_0` (`0xB0000`) | `890,864 B` (`870.0 KB`) | `3,342,336 B` (`3.19 MB`, `0x330000`) | `2,451,472 B` (`73.3%`) | `58,623 B` (`32.4%` of `180,736 B`) | `98,495 B` (`75.2%` of `131,072 B`) |
+
+### Shared Engine Cost Inside `esp32_cam_livestream_fw.bin`
+
+| Component Archive | Flash Code + Data | Static DRAM | Static IRAM | Notes |
+|---|---:|---:|---:|---|
+| `libcodec.a` | `8,390 B` | `0 B` | `0 B` | Bounded JPEG DCT parser + temporal encoder/decoder; working DCT buffers are PSRAM-allocated only when experimental DCT mode is enabled |
+| `libtransport.a` | `1,004 B` | `0 B` | `0 B` | `ECL1` wire header serializer + packetizer + IEEE CRC-32 |
+| `libmain.a` | `2,428 B` | `9,332 B` | `0 B` | Camera init, Wi-Fi STA, dual-core capture/TX task, UDP sender, metrics |
