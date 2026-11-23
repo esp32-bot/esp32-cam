@@ -1,0 +1,17 @@
+{
+  "width": 320,
+  "height": 240,
+  "frames_per_scene": 30,
+  "jpeg_quality": 75,
+  "scenes": [
+    {"name": "static_scene", "description": "Static indoor robotics scene with zero motion", "frames": 30, "avg_jpeg_bytes": 9311},
+    {"name": "small_pitch", "description": "Smooth +/-3 deg vertical pitch oscillation (~8 px amplitude)", "frames": 30, "avg_jpeg_bytes": 9285.23},
+    {"name": "smooth_pan", "description": "Constant 1.5 px/frame horizontal camera pan", "frames": 30, "avg_jpeg_bytes": 9336.37},
+    {"name": "large_motion", "description": "Fast 18 px/frame horizontal + 6 px/frame vertical motion", "frames": 30, "avg_jpeg_bytes": 9056.33},
+    {"name": "high_texture", "description": "Static high-frequency textured scene with mild CMOS noise", "frames": 30, "avg_jpeg_bytes": 21279.1},
+    {"name": "sensor_noise", "description": "Static scene with realistic per-frame CMOS noise (sigma=3.5)", "frames": 30, "avg_jpeg_bytes": 11503.4},
+    {"name": "scene_cut", "description": "Abrupt scene cuts at frame 10 and frame 20", "frames": 30, "avg_jpeg_bytes": 9482.9},
+    {"name": "repeated_frames", "description": "Exact repeated frames (groups of 5 identical frames)", "frames": 30, "avg_jpeg_bytes": 9205},
+    {"name": "brightness_change", "description": "Global illumination ramp simulating AEC / flicker", "frames": 30, "avg_jpeg_bytes": 9285.63}
+  ]
+}
