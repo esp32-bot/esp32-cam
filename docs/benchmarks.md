@@ -96,9 +96,9 @@
 | Image | Partition Slot | Binary Size | Partition Budget | Free Headroom | Static DRAM | Static IRAM |
 |---|---|---:|---:|---:|---:|---:|
 | `esp32cam_ota_stub.bin` | `factory` (`0x20000`) | `549,728 B` (`536.8 KB`) | `589,824 B` (`576 KB`, `0x90000`) | `40,096 B` (`6.8%`) | minimal | minimal |
-| `esp32_cam_livestream_fw.bin` (with DCT codec) | `ota_0` (`0xB0000`) | `890,864 B` (`870.0 KB`) | `3,342,336 B` (`3.19 MB`, `0x330000`) | `2,451,472 B` (`73.3%`) | `58,623 B` (`32.4%` of `180,736 B`) | `98,495 B` (`75.2%` of `131,072 B`) |
+| `esp32_cam_fw.bin` (with DCT codec) | `ota_0` (`0xB0000`) | `890,864 B` (`870.0 KB`) | `3,342,336 B` (`3.19 MB`, `0x330000`) | `2,451,472 B` (`73.3%`) | `58,623 B` (`32.4%` of `180,736 B`) | `98,495 B` (`75.2%` of `131,072 B`) |
 
-### Shared Engine Cost Inside `esp32_cam_livestream_fw.bin`
+### Shared Engine Cost Inside `esp32_cam_fw.bin`
 
 | Component Archive | Flash Code + Data | Static DRAM | Static IRAM | Notes |
 |---|---:|---:|---:|---|

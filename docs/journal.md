@@ -1,4 +1,4 @@
-# Engineering Journal — `esp32-cam-livestream`
+# Engineering Journal — `esp32-cam`
 
 ## Entry 1 — Milestone A: Discovery & Upstream Source Verification
 
@@ -7,7 +7,7 @@
 - ESP-IDF `v6.1.1` installed locally with `xtensa-esp32-elf-g++` (`esp-15.2.0_20251204`).
 - Host C/C++ dependencies installed: `jpeg-turbo 3.2.1`, `zlib`, `lz4 1.11.1`, `zstd 1.5.7`.
 - No QEMU, Wokwi CLI, Docker/Podman, PlatformIO, or Arduino CLI installed locally.
-- Mapped all 4 sibling `esp32-bot` repositories (`balax`, `balax-remote`, `joyx`, `tools`); all have active uncommitted work and were preserved untouched. Confirmed neither `esp32-cam-livestream` nor `balax-cam` existed locally or remotely.
+- Mapped all 4 sibling `esp32-bot` repositories (`balax`, `balax-remote`, `joyx`, `tools`); all have active uncommitted work and were preserved untouched. Confirmed neither `esp32-cam` nor `balax-cam` existed locally or remotely.
 - Reviewed BalaX silicon ground-truth docs (`M5STICKC_PLUS.md`, `ESP32_CAM.md`, `OV2640.md`) and `balax/main/imu_fusion.h` coordinate conventions (`+X` left, `+Y` up, `+Z` forward; `+pitch` leaning back, `+roll` leaning right).
 
 ### Upstream Source Verification
@@ -22,7 +22,7 @@
    - Documented Smith & Rowe (1993/1994/1996), Chang & Messerschmitt (1993/1995), Merhav & Bhaskaran (1997), Assuncao & Ghanbari (1998), Koc & Liu (1998), Song & Yeo (2000), and related patents. Our temporal DCT modes are explicitly framed as experimental prototypes, not novel inventions.
 
 ### Architectural Decisions Made
-- Build two clean repositories: `esp32-cam-livestream` (standalone video engine) and `balax-cam` (robot consumer depending on `esp32-cam-livestream`).
+- Build two clean repositories: `esp32-cam` (standalone video engine) and `balax-cam` (robot consumer depending on `esp32-cam`).
 - Keep `codec/` and `transport/` strictly platform-independent C++17 (no STL heap churn in hot paths, bounded buffers) so the exact same `.cpp`/`.hpp` files compile on Apple M5 host and ESP-IDF Xtensa `esp32`.
 - Keep `CODEC_PASS_THROUGH` as the permanent zero-overhead fallback and make all temporal modes and sensor-crop stabilization opt-in feature flags.
 

@@ -12,4 +12,4 @@ list(APPEND EXTRA_COMPONENT_DIRS
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 idf_build_set_property(MINIMAL_BUILD ON)
-project(esp32_cam_livestream_fw)
+project(esp32_cam_fw)

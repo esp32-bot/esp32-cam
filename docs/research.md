@@ -21,7 +21,7 @@ Every technical statement in this document is explicitly tagged with its provena
   - `balax-remote` (branch `main`): Web remote & 3D telemetry PWA.
   - `joyx` (branch `main`): M5StickC Plus physical joystick + ESP-NOW companion.
   - `tools` (branch `main`): Shared ESP-IDF components (`m5stickc_plus`, `gfx`, `settings`, `console_commands`, `ota`) and CLI helpers.
-  - Neither `esp32-cam-livestream` nor `balax-cam` existed locally or remotely in `@esp32-bot`.
+  - Neither `esp32-cam` nor `balax-cam` existed locally or remotely in `@esp32-bot`.
   - None of the existing `esp32-bot` repositories contain a `LICENSE` file yet; therefore no `LICENSE` file is prematurely imposed here until project licensing is explicitly chosen. All code written in this repository is clean-room and avoids copying GPL code.
 
 ---

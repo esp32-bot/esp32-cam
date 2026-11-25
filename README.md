@@ -1,4 +1,4 @@
-# esp32-cam-livestream
+# esp32-cam
 
 Reusable, low-latency, bandwidth-efficient video livestream engine targeting the **AI-Thinker ESP32-CAM (ESP32-S + OV2640)** while keeping its core protocol, packetizer, bounded JPEG DCT parser, and experimental compressed-domain temporal codec **100% platform-independent** so the exact same C++17 source compiles and runs on both desktop hosts and ESP-IDF Xtensa ESP32.
 
@@ -24,14 +24,14 @@ Defined in [`firmware/partitions_cam_compact.csv`](firmware/partitions_cam_compa
 | `otadata` | `data/ota` | `0xf000` | `8 KB` (`0x2000`) | Active boot slot selector (`factory` vs `ota_0`) |
 | `phy_init` | `data/phy` | `0x11000` | `4 KB` (`0x1000`) | RF calibration |
 | `factory` | `app/factory` | `0x20000` | **`576 KB` (`0x90000`)** | Tiny Wi-Fi OTA rescue stub (`esp32cam_ota_stub.bin` = 537 KB) |
-| `ota_0` | `app/ota_0` | `0xB0000` | **`3.19 MB` (`0x330000`)** | Main livestream or `balax-cam` firmware (`esp32_cam_livestream_fw.bin` = 870 KB) |
+| `ota_0` | `app/ota_0` | `0xB0000` | **`3.19 MB` (`0x330000`)** | Main livestream or `balax-cam` firmware (`esp32_cam_fw.bin` = 870 KB) |
 | `telemetry` | `data/0x99` | `0x3E0000` | `64 KB` (`0x10000`) | Local diagnostics ring |
 | `coredump` | `data/coredump` | `0x3F0000` | `64 KB` (`0x10000`) | Crash coredump storage |
 
 ### Verified Xtensa Build Footprints (ESP-IDF v6.1.1)
 
 - **`esp32cam_ota_stub.bin` (`factory`)**: `549,728 B` (`536.8 KB`, `0x86360`) — `39.2 KB` (`6.8%`) free in `0x90000` (`576 KB`), zero partition warnings.
-- **`esp32_cam_livestream_fw.bin` (`ota_0`)**: `890,864 B` (`870.0 KB`, `0xD97F0`) — `73%` free in `0x330000` (`3.19 MB`).
+- **`esp32_cam_fw.bin` (`ota_0`)**: `890,864 B` (`870.0 KB`, `0xD97F0`) — `73%` free in `0x330000` (`3.19 MB`).
   - Static DRAM: `58,623 B` (`32.4%` of `180,736 B`, `122,113 B` internal DRAM free + 4 MB PSRAM).
   - Static IRAM: `98,495 B` (`75.2%` of `131,072 B`, `32,577 B` free).
   - Shared engine size inside ESP32 image: `libcodec.a = 8,390 B` Flash (`0 B` static DRAM/IRAM), `libtransport.a = 1,004 B` Flash (`0 B` static DRAM/IRAM).
@@ -73,7 +73,7 @@ esptool.py --chip esp32 -p /dev/cu.usbserial-XXXX -b 460800 \
   0x8000  firmware/esp32cam/build/partition_table/partition-table.bin \
   0xf000  firmware/esp32cam/build/ota_data_initial.bin \
   0x20000 firmware/ota_stub/build/esp32cam_ota_stub.bin \
-  0xB0000 firmware/esp32cam/build/esp32_cam_livestream_fw.bin
+  0xB0000 firmware/esp32cam/build/esp32_cam_fw.bin
 ```
 
 Subsequent updates can be pushed over Wi-Fi directly into `ota_0` via the rescue stub (`POST http://esp32cam.local/ota`).
@@ -90,8 +90,13 @@ Subsequent updates can be pushed over Wi-Fi directly into `ota_0` via the rescue
 
 ## Consumer Repositories
 
-- `esp32-bot/balax-cam` — BalaC / M5StickC Plus attitude-coupled robot camera consumer that links `esp32-cam-livestream/codec` and `esp32-cam-livestream/transport` directly without duplicating internals.
+- `esp32-bot/balax-cam` — BalaC / M5StickC Plus attitude-coupled robot camera consumer that links `esp32-cam/codec` and `esp32-cam/transport` directly without duplicating internals.
 
 ## License
 
 License TBD pending maintainer decision across the `esp32-bot` organization (clean-room implementation; no GPL code copied).
+
+## Research & Competitive Benchmarks
+
+- [research/hx-esp32-cam-fpv.md](research/hx-esp32-cam-fpv.md) — Source-verified engineering teardown of `RomanLut/hx-esp32-cam-fpv` (sub-frame DMA streaming, OV2640 40 fps SVGA windowing, `K1×K2×K3` adaptive compression, FEC, Raw 802.11 / APFPV transport), gap analysis, and prioritized P0–P6 roadmap to beat it.
+

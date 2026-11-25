@@ -1,4 +1,4 @@
-# System Architecture — `esp32-cam-livestream`
+# System Architecture — `esp32-cam`
 
 ## 1. Layered Boundaries
 

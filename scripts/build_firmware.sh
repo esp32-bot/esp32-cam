@@ -34,4 +34,4 @@ build_one "ota_stub (factory @ 0x20000, max 0x90000)" \
   "${ROOT_DIR}/firmware/ota_stub" "esp32cam_ota_stub.bin"
 
 build_one "esp32cam (ota_0 @ 0xB0000, max 0x330000)" \
-  "${ROOT_DIR}/firmware/esp32cam" "esp32_cam_livestream_fw.bin"
+  "${ROOT_DIR}/firmware/esp32cam" "esp32_cam_fw.bin"

@@ -32,7 +32,7 @@ Inspected `davidmonterocrespo24/velxio` (`master` branch), specifically `docs/ES
   - It injects host-encoded JPEG/frame data rather than running a cycle-accurate OV2640 CMOS readout + hardware DSP JPEG engine.
   - It does not establish faithful OV2640 DSP crop-register (`XOFFL`/`YOFFL`/`VHYX`) mid-frame latching/tearing behavior or `QS` register quantization fidelity.
   - It does not model ESP32 SPI Flash/PSRAM bus contention or real 802.11 RF packet loss/throughput.
-- **Licensing note:** Because QEMU and Velxio's QEMU additions are GPL-2.0, zero code from QEMU or Velxio is copied into `esp32-cam-livestream`.
+- **Licensing note:** Because QEMU and Velxio's QEMU additions are GPL-2.0, zero code from QEMU or Velxio is copied into `esp32-cam`.
 
 ---
 
